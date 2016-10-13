@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">Shopping List</string>
+    <string name="action_settings">Settings</string>
+    <string name="add_button_text">Add Item</string>
+    <string name="add_joke_hint">Enter Item</string>
+    <string name="add_hint">Enter Item</string>
+    <string name="return_button">Return</string>
+    <string name="action_shopping">Shopping List</string>
+</resources>
