@@ -3,6 +3,7 @@ package leilani.android.hawaii.edu.shoppinglist;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -22,9 +23,17 @@ import android.view.KeyEvent;
 import android.view.View.OnClickListener;
 import android.view.View.OnKeyListener;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.Toast;
 
+
+import com.google.android.gms.appindexing.Action;
+import com.google.android.gms.appindexing.AppIndex;
+import com.google.android.gms.appindexing.Thing;
+import com.google.android.gms.common.api.GoogleApiClient;
 
 import java.util.ArrayList;
+
+import static android.R.color.white;
 
 public class ShoppingList extends AppCompatActivity {
 
@@ -36,9 +45,15 @@ public class ShoppingList extends AppCompatActivity {
     protected Menu m_vwMenu;
     protected ActionMode actionMode;
     protected int m_currentId;
+    Toolbar toolbar;
+    /**
+     * ATTENTION: This was auto-generated to implement the App Indexing API.
+     * See https://g.co/AppIndexing/AndroidStudio for more information.
+     */
+    private GoogleApiClient client;
 
     @Override
-    public void onCreate(Bundle savedInstanceState){
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         Resources res = this.getResources();
@@ -48,18 +63,38 @@ public class ShoppingList extends AppCompatActivity {
         this.m_shoppingAdapter = new ShoppingListAdapter(this, m_arrayGroceryList);
         this.m_vwShoppingLayout.setAdapter(m_shoppingAdapter);
 
+        this.initToolbar();
 
+        client = new GoogleApiClient.Builder(this).addApi(AppIndex.API).build();
+    }
+
+    public void initToolbar() {
+        toolbar = (Toolbar) findViewById(R.id.toolbar);
+        toolbar.setTitle(R.string.toolbar_shopping);
+        toolbar.setTitleTextColor(getResources().getColor(white));
+
+        setSupportActionBar(toolbar);
+        toolbar.setSubtitleTextColor(getResources().getColor(white));
+        toolbar.setNavigationOnClickListener(
+                new OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent intent = new Intent(v.getContext(), Settings.class);
+                        startActivity(intent);
+                    }
+                }
+        );
     }
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu){
+    public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.menu_shopping_list, menu);
         m_vwMenu = menu;
         return true;
     }
 
-    protected void initLayout(){
+    protected void initLayout() {
         setContentView(R.layout.activity_shopping_list);
         this.m_vwShoppingLayout = (ListView) findViewById(R.id.shoppingListViewGroup);
         this.m_vwShoppingEditText = (EditText) findViewById(R.id.newShoppingEditText);
@@ -68,13 +103,13 @@ public class ShoppingList extends AppCompatActivity {
         this.initLongClickListener();
     }
 
-    protected void initAddShoppingListeners(){
-        m_vwShoppingEditText.setOnKeyListener(new OnKeyListener(){
-            public boolean onKey(View v, int keyCode, KeyEvent event){
-                if(((event.getAction() == KeyEvent.ACTION_DOWN) &&
-                        (event.getKeyCode() == KeyEvent.KEYCODE_ENTER))||((event.getAction() == KeyEvent.ACTION_DOWN) &&
+    protected void initAddShoppingListeners() {
+        m_vwShoppingEditText.setOnKeyListener(new OnKeyListener() {
+            public boolean onKey(View v, int keyCode, KeyEvent event) {
+                if (((event.getAction() == KeyEvent.ACTION_DOWN) &&
+                        (event.getKeyCode() == KeyEvent.KEYCODE_ENTER)) || ((event.getAction() == KeyEvent.ACTION_DOWN) &&
                         (event.getKeyCode() == KeyEvent.KEYCODE_DPAD_CENTER))
-                        ){
+                        ) {
                     String shoppingText = m_vwShoppingEditText.getText().toString();
                     Grocery grocery = new Grocery(shoppingText);
                     addGrocery(grocery);
@@ -102,13 +137,13 @@ public class ShoppingList extends AppCompatActivity {
         });
     }
 
-    protected void initLongClickListener(){
+    protected void initLongClickListener() {
         m_vwShoppingLayout.requestFocus();
         m_vwShoppingLayout.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
             public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
-               if(actionMode !=null)
-                   return false;
+                if (actionMode != null)
+                    return false;
                 m_currentId = position;
 
                 actionMode = startActionMode(callback);
@@ -117,22 +152,22 @@ public class ShoppingList extends AppCompatActivity {
         });
     }
 
-    protected Callback callback = new Callback(){
+    protected Callback callback = new Callback() {
         @Override
-        public boolean onCreateActionMode(android.view.ActionMode mode, Menu menu) {
+        public boolean onCreateActionMode(ActionMode mode, Menu menu) {
             MenuInflater inflater = mode.getMenuInflater();
-            inflater.inflate(R.menu.menu_shopping_list,menu);
+            inflater.inflate(R.menu.action_menu, menu);
             return true;
         }
 
         @Override
-        public boolean onPrepareActionMode(android.view.ActionMode mode, Menu menu) {
+        public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
             return false;
         }
 
         @Override
-        public boolean onActionItemClicked(android.view.ActionMode mode, MenuItem item) {
-            switch(item.getItemId()){
+        public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
+            switch (item.getItemId()) {
                 case R.id.menu_remove:
                     m_arrayGroceryList.remove(m_currentId);
                     m_shoppingAdapter.notifyDataSetChanged();
@@ -143,25 +178,49 @@ public class ShoppingList extends AppCompatActivity {
         }
 
         @Override
-        public void onDestroyActionMode(android.view.ActionMode mode) {
+        public void onDestroyActionMode(ActionMode mode) {
             actionMode = null;
         }
     };
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item){
-        switch(item.getItemId()){
-            case R.id.action_settings:
-                Intent intent = new Intent(this, Settings.class);
-                startActivity(intent);
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
-        }
-    }
-
-    protected void addGrocery(Grocery grocery){
+    protected void addGrocery(Grocery grocery) {
         m_arrayGroceryList.add(grocery);
         m_shoppingAdapter.notifyDataSetChanged();
+    }
+
+    /**
+     * ATTENTION: This was auto-generated to implement the App Indexing API.
+     * See https://g.co/AppIndexing/AndroidStudio for more information.
+     */
+    public Action getIndexApiAction() {
+        Thing object = new Thing.Builder()
+                .setName("ShoppingList Page") // TODO: Define a title for the content shown.
+                // TODO: Make sure this auto-generated URL is correct.
+                .setUrl(Uri.parse("http://[ENTER-YOUR-URL-HERE]"))
+                .build();
+        return new Action.Builder(Action.TYPE_VIEW)
+                .setObject(object)
+                .setActionStatus(Action.STATUS_TYPE_COMPLETED)
+                .build();
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+
+        // ATTENTION: This was auto-generated to implement the App Indexing API.
+        // See https://g.co/AppIndexing/AndroidStudio for more information.
+        client.connect();
+        AppIndex.AppIndexApi.start(client, getIndexApiAction());
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+
+        // ATTENTION: This was auto-generated to implement the App Indexing API.
+        // See https://g.co/AppIndexing/AndroidStudio for more information.
+        AppIndex.AppIndexApi.end(client, getIndexApiAction());
+        client.disconnect();
     }
 }

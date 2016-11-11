@@ -1,5 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <item name="action_shopping" type="id">Shopping List</item>
-    <item name="menu_remove" type="id">Remove</item>
 </resources>
