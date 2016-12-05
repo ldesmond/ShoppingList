@@ -2,6 +2,7 @@ package leilani.android.hawaii.edu.shoppinglist;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
@@ -38,17 +39,18 @@ public class EditGroceryActivity extends AppCompatActivity {
 
     }
 
-    private void onSave(View view){
+    public void onSave(View view){
         this.m_grocery.setGrocery(t_name.getText().toString());
 
         //Navigating back to list screen
         Intent intent = new Intent(this, ShoppingList.class);
         startActivity(intent);
     }
-    private void onChangeLocation(View view){
+    public void onChangeLocation(View view){
         //pass the grocery item through searchActivity and mapsActivity
 
         Intent intent = new Intent(this, SearchActivity.class);
+        intent.putExtra("grocery", (Parcelable) m_grocery);
         startActivity(intent);
     }
 }

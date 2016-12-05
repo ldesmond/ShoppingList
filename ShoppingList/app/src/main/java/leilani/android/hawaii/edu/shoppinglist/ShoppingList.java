@@ -76,28 +76,12 @@ public class ShoppingList extends AppCompatActivity {
         this.initLayout();
         this.m_shoppingAdapter = new ShoppingListAdapter(this, m_arrayGroceryList);
         this.m_vwShoppingLayout.setAdapter(m_shoppingAdapter);
-        this.m_vwShoppingLayout.setOnItemClickListener(new
-                                                               AdapterView.OnItemClickListener() {
-                                                                   @Override
-                                                                   public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-//                                                                   String picked = "You selected" + String.valueOf(parent.getItemAtPosition(position));
-//                                                                   Toast.makeText(GoogleSearchIntentActivity.this, picked, Toast.LENGTH_SHORT).show();
-
-                                                                       Grocery n_grocery = (Grocery)parent.getItemAtPosition(position);
-                                                                       viewGrocery(n_grocery);
-
-                                                                   }
-                                                               });
 
         this.initToolbar();
 
         client = new GoogleApiClient.Builder(this).addApi(AppIndex.API).build();
     }
-    public void viewGrocery(Grocery grocery){
-        Intent intent = new Intent(this,EditGroceryActivity.class);
-        intent.putExtra("grocery", (Parcelable) grocery);
-        startActivity(intent);
-    }
+
     public void initToolbar() {
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         toolbar.setTitle(R.string.toolbar_shopping);
