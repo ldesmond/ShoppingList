@@ -82,6 +82,15 @@ public class ShoppingList extends AppCompatActivity {
         client = new GoogleApiClient.Builder(this).addApi(AppIndex.API).build();
     }
 
+    private void viewGrocery(Grocery grocery){
+        // try to make items clickable and calls this function
+        // takes them to EditGroceryActivity, passes in grocery object
+
+        Intent intent = new Intent(this, EditGroceryActivity.class);
+        intent.putExtra("grocery", (Parcelable) grocery);
+        startActivity(intent);
+    }
+
     public void initToolbar() {
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         toolbar.setTitle(R.string.toolbar_shopping);
