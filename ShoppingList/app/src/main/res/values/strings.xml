@@ -10,4 +10,7 @@
     <string name="toolbar_options">Settings</string>
     <string name="toolbar_shopping">Shopping List</string>
     <string name="clear_all">Clear all</string>
+    <string name="title_activity_maps">MapsActivity</string>
+    <string name="title_activity_search">SearchActivity</string>
+    <string name="title_activity_edit_grocery">EditGroceryActivity</string>
 </resources>
