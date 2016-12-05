@@ -31,7 +31,15 @@ import com.google.android.gms.appindexing.AppIndex;
 import com.google.android.gms.appindexing.Thing;
 import com.google.android.gms.common.api.GoogleApiClient;
 
+import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
 import java.util.ArrayList;
+import java.util.List;
+import java.util.StringTokenizer;
 
 import static android.R.color.white;
 
@@ -45,7 +53,10 @@ public class ShoppingList extends AppCompatActivity {
     protected Menu m_vwMenu;
     protected ActionMode actionMode;
     protected int m_currentId;
+    private final static String STORETEXT = "storetext.txt";
+    private OutputStreamWriter out = null;
     Toolbar toolbar;
+
     /**
      * ATTENTION: This was auto-generated to implement the App Indexing API.
      * See https://g.co/AppIndexing/AndroidStudio for more information.
@@ -57,11 +68,14 @@ public class ShoppingList extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
         Resources res = this.getResources();
+
         m_arrayGroceryList = new ArrayList<>();
+        readFileInEditor();
 
         this.initLayout();
         this.m_shoppingAdapter = new ShoppingListAdapter(this, m_arrayGroceryList);
         this.m_vwShoppingLayout.setAdapter(m_shoppingAdapter);
+
 
         this.initToolbar();
 
@@ -75,15 +89,23 @@ public class ShoppingList extends AppCompatActivity {
 
         setSupportActionBar(toolbar);
         toolbar.setSubtitleTextColor(getResources().getColor(white));
-        toolbar.setNavigationOnClickListener(
-                new OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        Intent intent = new Intent(v.getContext(), Settings.class);
-                        startActivity(intent);
-                    }
-                }
-        );
+        }
+
+    public void goToSettings(MenuItem i){
+        Intent intent = new Intent(this, Settings.class);
+        startActivity(intent);
+    }
+
+    public void clearAll(MenuItem i){
+        try{
+            out = new OutputStreamWriter(openFileOutput(STORETEXT, 0));
+            out.flush();
+        }
+        catch (IOException e) {
+            e.printStackTrace();
+        }
+        m_arrayGroceryList.clear();
+        m_shoppingAdapter.notifyDataSetChanged();
     }
 
     @Override
@@ -93,6 +115,33 @@ public class ShoppingList extends AppCompatActivity {
         m_vwMenu = menu;
         return true;
     }
+
+    public void readFileInEditor(){
+        try{
+            InputStream in = openFileInput(STORETEXT);
+            if (in != null){
+                InputStreamReader tmp = new InputStreamReader(in);
+                BufferedReader reader = new BufferedReader(tmp);
+                String str;
+
+                while((str = reader.readLine()) != null){
+                    StringTokenizer tokens = new StringTokenizer(str, ",");
+                    String s;
+                    while((s = tokens.nextToken()) !=null) {
+                        Grocery grocery = new Grocery(s);
+                        m_arrayGroceryList.add(grocery);
+                        m_shoppingAdapter.notifyDataSetChanged();
+                    }
+                }
+                in.close();
+
+            }
+        }
+        catch(Throwable t){
+            t.printStackTrace();
+        }
+    }
+
 
     protected void initLayout() {
         setContentView(R.layout.activity_shopping_list);
@@ -152,6 +201,21 @@ public class ShoppingList extends AppCompatActivity {
         });
     }
 
+    protected void fileRemove(Grocery grocery){
+        try{
+            out.flush();
+            int i = 0;
+            while(i <= m_arrayGroceryList.size()){
+                out.write(grocery.toString()+",");
+                i++;
+            }
+        }
+        catch (IOException e) {
+            e.printStackTrace();
+        }
+
+    }
+
     protected Callback callback = new Callback() {
         @Override
         public boolean onCreateActionMode(ActionMode mode, Menu menu) {
@@ -169,6 +233,7 @@ public class ShoppingList extends AppCompatActivity {
         public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
             switch (item.getItemId()) {
                 case R.id.menu_remove:
+                    fileRemove(m_arrayGroceryList.get(m_currentId));
                     m_arrayGroceryList.remove(m_currentId);
                     m_shoppingAdapter.notifyDataSetChanged();
                     return true;
@@ -185,8 +250,23 @@ public class ShoppingList extends AppCompatActivity {
 
     protected void addGrocery(Grocery grocery) {
         m_arrayGroceryList.add(grocery);
+        try {
+
+            out = new OutputStreamWriter(openFileOutput(STORETEXT, MODE_APPEND));
+
+            out.write(grocery.toString());
+            out.write(",");
+
+            out.close();
+            Toast.makeText(getBaseContext(), "The contents are saved in the file.", Toast.LENGTH_LONG).show();
+        }
+        catch (Throwable t){
+            Toast.makeText(getBaseContext(), "Exception: "+t.toString(), Toast.LENGTH_LONG).show();
+        }
         m_shoppingAdapter.notifyDataSetChanged();
     }
+
+
 
     /**
      * ATTENTION: This was auto-generated to implement the App Indexing API.

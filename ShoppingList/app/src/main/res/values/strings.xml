@@ -9,4 +9,5 @@
     <string name="remove_menuitem">Remove</string>
     <string name="toolbar_options">Settings</string>
     <string name="toolbar_shopping">Shopping List</string>
+    <string name="clear_all">Clear all</string>
 </resources>

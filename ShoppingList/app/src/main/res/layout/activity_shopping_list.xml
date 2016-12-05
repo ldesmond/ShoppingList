@@ -24,7 +24,7 @@
             <Button android:id="@+id/addShoppingButton"
                 android:text="@string/add_button_text"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content" >
+                android:layout_height="wrap_content">
             </Button>
             <EditText android:id="@+id/newShoppingEditText"
                 android:hint="@string/add_hint"
