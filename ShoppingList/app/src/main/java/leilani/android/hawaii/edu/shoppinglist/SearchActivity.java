@@ -51,7 +51,7 @@ import java.util.List;
 
 public class SearchActivity extends AppCompatActivity {
 
-    LatLng currentLatLng;
+    private LatLng currentLatLng;
     private String searchField;
     protected ListView addressListView;
     private ArrayList<Address> addressList;
@@ -70,8 +70,8 @@ public class SearchActivity extends AppCompatActivity {
 
         searchField="";
         currentLatLng = new LatLng(21.300191, -157.819018);
-        Intent intent = getIntent();
-        selectedGrocery = intent.getExtras().getParcelable("grocery");
+//        Intent intent = getIntent();
+//        selectedGrocery = intent.getExtras().getParcelable("grocery");
         initLayout();
 
     }
@@ -99,7 +99,7 @@ public class SearchActivity extends AppCompatActivity {
                                                                @Override
                                                                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 //                                                                   String picked = "You selected" + String.valueOf(parent.getItemAtPosition(position));
-//                                                                   Toast.makeText(GoogleSearchIntentActivity.this, picked, Toast.LENGTH_SHORT).show();
+//                                                                   Toast.makeText(SearchActivity.this, picked, Toast.LENGTH_SHORT).show();
                                                                    Address viewAddress = (Address)parent.getItemAtPosition(position);
                                                                    viewOnMap(viewAddress);
 
@@ -115,7 +115,7 @@ public class SearchActivity extends AppCompatActivity {
     public void viewOnMap(Address address){
         Intent intent = new Intent(this, MapsActivity.class);
         intent.putExtra("address",address);
-        intent.putExtra("grocery", (Parcelable) this.selectedGrocery);
+//        intent.putExtra("grocery", (Parcelable) this.selectedGrocery);
         startActivity(intent);
     }
 

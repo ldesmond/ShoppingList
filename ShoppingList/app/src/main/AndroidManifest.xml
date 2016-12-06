@@ -2,6 +2,12 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
           package="leilani.android.hawaii.edu.shoppinglist">
 
+    <permission
+        android:name="com.example.barcodelibrary.permission.MAPS_RECEIVE"
+        android:protectionLevel="signature"/>
+    <uses-permission android:name="leilani.android.hawaii.edu.shoppinglist.permission.MAPS_RECEIVE"/>
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
     <uses-permission android:name="android.permission.INTERNET"/>
     <uses-permission android:name="com.google.android.providers.gsf.permission.READ_GSERVICES"/>
@@ -10,6 +16,8 @@
          Google Maps Android API v2, but you must specify either coarse or fine
          location permissions for the 'MyLocation' functionality.
     -->
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
+
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
 
     <application
@@ -22,11 +30,13 @@
             android:name=".ShoppingList"
             android:label="@string/app_name"
             android:theme="@style/AppTheme.NoActionBar">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN"/>
 
-                <category android:name="android.intent.category.LAUNCHER"/>
-            </intent-filter>
+             <intent-filter>
+             <action android:name="android.intent.action.MAIN"/>
+
+
+             <category android:name="android.intent.category.LAUNCHER"/>
+             </intent-filter>
         </activity>
         <activity android:name=".Settings"/>
         <!--
@@ -36,6 +46,12 @@
         <meta-data
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version"/>
+        <!--<meta-data-->
+            <!--android:name="com.google.android.geo.API_KEY"-->
+            <!--android:value="@string/google_maps_key"/>-->
+        <meta-data
+        android:name="com.google.android.geo.API_KEY"
+        android:value="AIzaSyCOJRQq6_IPRu0zhFTgS03UNBGFfT-1hmw"/>
 
         <activity
             android:name=".MapsActivity"
@@ -46,12 +62,14 @@
             android:name=".SearchActivity"
             android:label="@string/title_activity_search"
             android:theme="@style/AppTheme.NoActionBar">
+
         </activity>
         <activity
             android:name=".EditGroceryActivity"
             android:label="@string/title_activity_edit_grocery"
             android:theme="@style/AppTheme.NoActionBar">
         </activity>
+
     </application>
 
 </manifest>

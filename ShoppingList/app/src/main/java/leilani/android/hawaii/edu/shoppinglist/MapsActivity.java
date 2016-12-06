@@ -89,7 +89,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
         Intent intent = getIntent();
         selectedAddress = intent.getExtras().getParcelable("address");
-        selectedGrocery = intent.getExtras().getParcelable("grocery");
+//        selectedGrocery = intent.getExtras().getParcelable("grocery");
         newLocation = new LatLng(selectedAddress.getLatitude(), selectedAddress.getLongitude());
         locationtv = (TextView) findViewById(R.id.map_location_name);
         locationtv.setText(selectedAddress.getAddressLine(0));
@@ -101,9 +101,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     }
 
     public void onAddLocationClick(View view) {
-        selectedGrocery.setLocation(this.selectedAddress.getAddressLine(0));
-        selectedGrocery.setLat((long) selectedAddress.getLatitude());
-        selectedGrocery.setLong((long) selectedAddress.getLongitude());
+//        selectedGrocery.setLocation(this.selectedAddress.getAddressLine(0));
+//        selectedGrocery.setLat((long) selectedAddress.getLatitude());
+//        selectedGrocery.setLong((long) selectedAddress.getLongitude());
 
         Intent intent = new Intent(this, ShoppingList.class);
         startActivity(intent);
@@ -150,18 +150,17 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         LatLng sydney = new LatLng(-34, 151);
         mMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
         mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney)); */
-        if (newLocation != null) {
-            Marker searchResultMarker = mMap.addMarker(new MarkerOptions()
-                    .position(newLocation)
-                    .title(newLocationName)
-                    .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_CYAN)));
-            mMap.moveCamera(CameraUpdateFactory.newLatLng(newLocation));
-            mMap.setMinZoomPreference(15.0f);
-            mMap.setMaxZoomPreference(20.0f);
-            searchResultMarker.showInfoWindow();
+//        if (newLocation != null) {
+//            Marker searchResultMarker = mMap.addMarker(new MarkerOptions()
+//                    .position(newLocation)
+//                    .title(newLocationName)
+//                    .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_CYAN)));
+//            mMap.moveCamera(CameraUpdateFactory.newLatLng(newLocation));
+//            mMap.setMinZoomPreference(15.0f);
+//            mMap.setMaxZoomPreference(20.0f);
+//            searchResultMarker.showInfoWindow();
 //            Toast.makeText(MapsActivity.this, "new location", Toast.LENGTH_SHORT).show();
-
-        }
+//        }
 
 
     }
@@ -233,35 +232,35 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     public void onRequestPermissionsResult(int requestCode,
                                            @NonNull String permissions[], @NonNull int[]
                                                    grantResults) {
-        switch (requestCode) {
-            case MY_PERMISSIONS_REQUEST_LOCATION: {
-                // If request is cancelled, the result arrays are empty.
-                if (grantResults.length > 0
-                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-
-                    // permission was granted. Do the
-                    // contacts-related task you need to do.
-                    if (ContextCompat.checkSelfPermission(this,
-                            android.Manifest.permission.ACCESS_FINE_LOCATION)
-                            == PackageManager.PERMISSION_GRANTED) {
-
-                        if (mGoogleApiClient == null) {
-                            buildGoogleApiClient();
-                        }
-                        mMap.setMyLocationEnabled(true);
-                    }
-
-                } else {
-
-                    // Permission denied, Disable the functionality that depends on this permission.
-                    Toast.makeText(this, "permission denied", Toast.LENGTH_LONG).show();
-                }
-
-            }
-
-            // other 'case' lines to check for other permissions this app might request.
-            // You can add here other case statements according to your requirement.
-        }
+//        switch (requestCode) {
+//            case MY_PERMISSIONS_REQUEST_LOCATION: {
+//                // If request is cancelled, the result arrays are empty.
+//                if (grantResults.length > 0
+//                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+//
+//                    // permission was granted. Do the
+//                    // contacts-related task you need to do.
+//                    if (ContextCompat.checkSelfPermission(this,
+//                            android.Manifest.permission.ACCESS_FINE_LOCATION)
+//                            == PackageManager.PERMISSION_GRANTED) {
+//
+//                        if (mGoogleApiClient == null) {
+//                            buildGoogleApiClient();
+//                        }
+//                        mMap.setMyLocationEnabled(true);
+//                    }
+//
+//                } else {
+//
+//                    // Permission denied, Disable the functionality that depends on this permission.
+//                    Toast.makeText(this, "permission denied", Toast.LENGTH_LONG).show();
+//                }
+//
+//            }
+//
+//            // other 'case' lines to check for other permissions this app might request.
+//            // You can add here other case statements according to your requirement.
+//        }
     }
 
 
