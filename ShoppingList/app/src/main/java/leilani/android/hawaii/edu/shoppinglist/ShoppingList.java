@@ -85,9 +85,9 @@ public class ShoppingList extends AppCompatActivity {
     private void viewGrocery(Grocery grocery){
         // try to make items clickable and calls this function
         // takes them to EditGroceryActivity, passes in grocery object
-
+//
         Intent intent = new Intent(this, EditGroceryActivity.class);
-        intent.putExtra("grocery", (Parcelable) grocery);
+//        intent.putExtra("grocery", (Parcelable) grocery);
         startActivity(intent);
     }
 
@@ -208,6 +208,19 @@ public class ShoppingList extends AppCompatActivity {
                 return true;
             }
         });
+        m_vwShoppingLayout.setOnItemClickListener(new
+                                                          AdapterView.OnItemClickListener() {
+                                                              @Override
+                                                              public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+//                                                                   String picked = "You selected" + String.valueOf(parent.getItemAtPosition(position));
+//                                                                   Toast.makeText(GoogleSearchIntentActivity.this, picked, Toast.LENGTH_SHORT).show();
+
+                                                                  Grocery t_grocery = (Grocery)parent.getItemAtPosition(position);
+                                                                  viewGrocery(t_grocery);
+
+                                                              }
+                                                          });
+
     }
 
     protected void fileRemove(Grocery grocery){
